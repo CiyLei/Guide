@@ -95,20 +95,22 @@ public class MyGuideView extends DefaultGuideView {
 
             canvas.drawBitmap(BitmapFactory.decodeResource(getView().getContext().getResources(), R.mipmap.back), null, rect, paint);
             //获取说明view的坐标
-            Rect descriptionLocation = getDescriptionLocation(descriptionView, location, 100, 100);
-            //连线
-            if (descriptionLocation.top >= getView().getTop()) {
-                canvas.drawLine(location[0] + (getView().getWidth() / 2),
-                        location[1] + getView().getHeight(),
-                        descriptionLocation.left + (descriptionLocation.width() / 2),
-                        descriptionLocation.top,
-                        paint);
-            } else {
-                canvas.drawLine(location[0] + (getView().getWidth() / 2),
-                        location[1],
-                        descriptionLocation.left + (descriptionLocation.width() / 2),
-                        descriptionLocation.top + descriptionLocation.height(),
-                        paint);
+            if (descriptionView != null) {
+                Rect descriptionLocation = getDescriptionLocation(descriptionView, location, 100, 100);
+                //连线
+                if (descriptionLocation.top >= getView().getTop()) {
+                    canvas.drawLine(location[0] + (getView().getWidth() / 2),
+                            location[1] + getView().getHeight(),
+                            descriptionLocation.left + (descriptionLocation.width() / 2),
+                            descriptionLocation.top,
+                            paint);
+                } else {
+                    canvas.drawLine(location[0] + (getView().getWidth() / 2),
+                            location[1],
+                            descriptionLocation.left + (descriptionLocation.width() / 2),
+                            descriptionLocation.top + descriptionLocation.height(),
+                            paint);
+                }
             }
         }
     }
