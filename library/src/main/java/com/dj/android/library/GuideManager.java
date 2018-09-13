@@ -23,6 +23,7 @@ public class GuideManager {
     private FrameLayout mBackgroundView;
     private GuideMaskView mGuideMaskView;
     private View mDescriptionView;
+    GuideView currentGuideView;
 
     private Listener listener;
 
@@ -58,7 +59,13 @@ public class GuideManager {
         mGuideMaskView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OnNext();
+                if (currentGuideView != null) {
+                    if (currentGuideView.onClickBackgroundNext()) {
+                        OnNext();
+                    }
+                } else {
+                    OnNext();
+                }
             }
         });
         mBackgroundDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -91,17 +98,18 @@ public class GuideManager {
         return gv;
     }
 
-    private void OnNext() {
-        GuideView gv = popGuideView();
-        if (gv != null) {
+    public void OnNext() {
+        currentGuideView = popGuideView();
+        if (currentGuideView != null) {
+            currentGuideView.setManager(this);
             if (listener != null) {
-                listener.onBefore(gv.getId());
+                listener.onBefore(currentGuideView.getId());
             }
-            mGuideMaskView.mask(gv);
+            mGuideMaskView.mask(currentGuideView);
             //镂空
-            View descriptionView = gv.descriptionView(gv.getId());
+            View descriptionView = currentGuideView.descriptionView(currentGuideView.getId());
             //回调OnGuideDraw
-            mGuideMaskView.guideDraw(gv, descriptionView);
+            mGuideMaskView.guideDraw(currentGuideView, descriptionView);
             //添加说明view
             if (descriptionView != null) {
                 if (mDescriptionView == null) {

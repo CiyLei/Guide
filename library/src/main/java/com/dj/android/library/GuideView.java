@@ -10,6 +10,7 @@ public abstract class GuideView {
     private int id;
     private View view;
     private String description;
+    private GuideManager manager;
 
     public GuideView(int id, View view, String description) {
         this.id = id;
@@ -31,6 +32,14 @@ public abstract class GuideView {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public GuideManager getManager() {
+        return manager;
+    }
+
+    public void setManager(GuideManager manager) {
+        this.manager = manager;
     }
 
     /**
@@ -55,4 +64,12 @@ public abstract class GuideView {
      * @param canvas
      */
     public void onGuideDraw(int id, Canvas canvas, View descriptionView){};
+
+    /**
+     * 点击背景下一步
+     * @return
+     */
+    public boolean onClickBackgroundNext() {
+        return true;
+    }
 }
