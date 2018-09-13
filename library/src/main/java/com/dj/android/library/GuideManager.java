@@ -38,7 +38,7 @@ public class GuideManager {
     public void start(Context context) {
         sortGuideViews();
         showBackgroundDialog(context);
-        OnNext();
+        onNext();
     }
 
     private void sortGuideViews() {
@@ -61,10 +61,10 @@ public class GuideManager {
             public void onClick(View v) {
                 if (currentGuideView != null) {
                     if (currentGuideView.onClickBackgroundNext()) {
-                        OnNext();
+                        onNext();
                     }
                 } else {
-                    OnNext();
+                    onNext();
                 }
             }
         });
@@ -98,7 +98,7 @@ public class GuideManager {
         return gv;
     }
 
-    public void OnNext() {
+    public void onNext() {
         currentGuideView = popGuideView();
         if (currentGuideView != null) {
             currentGuideView.setManager(this);

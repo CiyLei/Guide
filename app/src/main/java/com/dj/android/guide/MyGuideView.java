@@ -51,7 +51,7 @@ public class MyGuideView extends DefaultGuideView {
             @Override
             public void onClick(View v) {
                 if (getManager() != null) {
-                    getManager().OnNext();
+                    getManager().onNext();
                 }
             }
         });
