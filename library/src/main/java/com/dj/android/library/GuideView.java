@@ -54,5 +54,5 @@ public abstract class GuideView {
      * 在蒙板绘制完毕之后的画板
      * @param canvas
      */
-    public void OnGuideDraw(int id, Canvas canvas){};
+    public void onGuideDraw(int id, Canvas canvas, View descriptionView){};
 }

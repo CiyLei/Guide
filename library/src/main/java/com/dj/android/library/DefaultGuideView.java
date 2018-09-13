@@ -3,11 +3,11 @@ package com.dj.android.library;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -59,69 +59,61 @@ public class DefaultGuideView extends GuideView {
         if (getView() != null) {
             int[] location = new int[2];
             getView().getLocationOnScreen(location);
-            vg.getViewTreeObserver().addOnGlobalLayoutListener(new DescriptionViewTreeObserver(vg, location));
+
+            FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            //先测量大小
+            vg.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            Rect descriptionLocation = getDescriptionLocation(vg, location);
+            flp.leftMargin = descriptionLocation.left;
+            flp.topMargin = descriptionLocation.top;
+            vg.setLayoutParams(flp);
         }
 
         return vg;
     }
 
-    public class DescriptionViewTreeObserver implements ViewTreeObserver.OnGlobalLayoutListener {
+    /**
+     * 根据镂空的view自动计算说明的view该放哪里
+     * @param descriptionView
+     * @param viewLocation
+     * @return
+     */
+    public Rect getDescriptionLocation(View descriptionView, int[] viewLocation) {
+        return getDescriptionLocation(descriptionView, viewLocation, 0, 0);
+    }
 
-        int flag = 0;
-        View vg;
-        int[] location;
-        FrameLayout.LayoutParams lp;
-
-        public DescriptionViewTreeObserver(View vg, int[] location) {
-            this.vg = vg;
-            this.location = location;
-        }
-
-        public DescriptionViewTreeObserver(View vg, int[] location, FrameLayout.LayoutParams lp) {
-            this.vg = vg;
-            this.location = location;
-            this.lp = lp;
-        }
-
-        @Override
-        public void onGlobalLayout() {
-            if (flag < 5) {
-                FrameLayout.LayoutParams flp = (lp == null ? new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT) : lp);
-                int tl = (location[0] + getView().getWidth()) * location[1];
-                int tr = (GuideUtils.getScreenWidth(vg.getContext()) - location[0]) * location[1];
-                int bl = (location[0] + getView().getWidth()) * (GuideUtils.getScreenHeight(vg.getContext()) - location[1] - getView().getHeight());
-                int br = (GuideUtils.getScreenWidth(vg.getContext()) - location[0]) * (GuideUtils.getScreenHeight(vg.getContext()) - location[1] - getView().getHeight());
-                //取上下左右最大的面积大小
-                int maxArea = Math.max(Math.max(Math.max(tl, tr), bl), br);
-                Log.d(TAG, "onGlobalLayout: " + vg.getMeasuredWidth() + "," + vg.getMeasuredHeight() + "," +
-                        (vg.getMeasuredWidth() * vg.getMeasuredHeight()) + "," + maxArea );
-                if (vg.getMeasuredWidth() * vg.getMeasuredHeight() <= maxArea) {
-                    if (tl == maxArea) {
-                        flp.leftMargin = location[0] + getView().getWidth() - vg.getMeasuredWidth();
-                        flp.topMargin = location[1] - vg.getMeasuredHeight();
-                    } else if (tr == maxArea) {
-                        flp.leftMargin = location[0];
-                        flp.topMargin = location[1] - vg.getMeasuredHeight();
-                    } else if (bl == maxArea) {
-                        flp.leftMargin = location[0] + getView().getWidth() - vg.getMeasuredWidth();
-                        flp.topMargin = location[1] + getView().getHeight();
-                    } else if (br == maxArea) {
-                        flp.leftMargin = location[0];
-                        flp.topMargin = location[1] + getView().getHeight();
-                    }
-                } else {
-                    //因为第一次返回的位置不正常，所以不操作
-                    if (flag != 0) {
-                        flp.leftMargin = location[0];
-                        flp.topMargin = location[1];
-                    }
-                }
-                vg.setLayoutParams(flp);
-                vg.setVisibility(flag < 4 ? View.INVISIBLE : View.VISIBLE);
-            } else {
-                vg.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+    public Rect getDescriptionLocation(View descriptionView, int[] viewLocation, int dx, int dy) {
+        int descriptionViewLeft = 0;
+        int descriptionViewTop = 0;
+        int tl = (viewLocation[0] + getView().getWidth()) * viewLocation[1];
+        int tr = (GuideUtils.getScreenWidth(descriptionView.getContext()) - viewLocation[0]) * viewLocation[1];
+        int bl = (viewLocation[0] + getView().getWidth()) * (GuideUtils.getScreenHeight(descriptionView.getContext()) - viewLocation[1] - getView().getHeight());
+        int br = (GuideUtils.getScreenWidth(descriptionView.getContext()) - viewLocation[0]) * (GuideUtils.getScreenHeight(descriptionView.getContext()) - viewLocation[1] - getView().getHeight());
+        //取上下左右最大的面积大小
+        int maxArea = Math.max(Math.max(Math.max(tl, tr), bl), br);
+        Log.d(TAG, "onGlobalLayout: " + descriptionView.getMeasuredWidth() + "," + descriptionView.getMeasuredHeight() + "," +
+                (descriptionView.getMeasuredWidth() * descriptionView.getMeasuredHeight()) + "," + maxArea );
+        if (descriptionView.getMeasuredWidth() * descriptionView.getMeasuredHeight() <= maxArea) {
+            if (tl == maxArea) {
+                descriptionViewLeft = viewLocation[0] + getView().getWidth() - descriptionView.getMeasuredWidth() - dx;
+                descriptionViewTop = viewLocation[1] - descriptionView.getMeasuredHeight() - dy;
+            } else if (tr == maxArea) {
+                descriptionViewLeft = viewLocation[0] + dx;
+                descriptionViewTop = viewLocation[1] - descriptionView.getMeasuredHeight() - dy;
+            } else if (bl == maxArea) {
+                descriptionViewLeft = viewLocation[0] + getView().getWidth() - descriptionView.getMeasuredWidth() - dx;
+                descriptionViewTop = viewLocation[1] + getView().getHeight() + dy;
+            } else if (br == maxArea) {
+                descriptionViewLeft = viewLocation[0] + dx;
+                descriptionViewTop = viewLocation[1] + getView().getHeight() + dy;
             }
-            flag++;
+        } else {
+            //居中显示
+            descriptionViewLeft = viewLocation[0] + (getView().getWidth() / 2) - (descriptionView.getMeasuredWidth() / 2) + dx;
+            descriptionViewTop = viewLocation[1] + (getView().getHeight() / 2) - (descriptionView.getMeasuredHeight() / 2) + dy;
         }
+        Log.d(TAG, "getDescriptionLocation: " + descriptionViewLeft + "," + descriptionViewTop);
+        return new Rect(descriptionViewLeft, descriptionViewTop, descriptionViewLeft + descriptionView.getMeasuredWidth(),
+                descriptionViewTop + descriptionView.getMeasuredHeight());
     }
 }

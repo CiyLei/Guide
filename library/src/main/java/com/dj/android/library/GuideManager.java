@@ -100,6 +100,8 @@ public class GuideManager {
             mGuideMaskView.mask(gv);
             //镂空
             View descriptionView = gv.descriptionView(gv.getId());
+            //回调OnGuideDraw
+            mGuideMaskView.guideDraw(gv, descriptionView);
             //添加说明view
             if (descriptionView != null) {
                 if (mDescriptionView == null) {

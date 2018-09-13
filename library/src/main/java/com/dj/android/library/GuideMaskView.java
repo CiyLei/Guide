@@ -23,6 +23,8 @@ public class GuideMaskView extends View {
     private Paint mPaint;
     private RectF mRectF;
     private Xfermode mXfermode_DST_OUT;
+    private boolean guideDrawFlag = false;
+    private View descriptionView;
 
     public GuideMaskView(Context context) {
         this(context, null);
@@ -39,6 +41,13 @@ public class GuideMaskView extends View {
 
     public void mask(GuideView guideView) {
         this.mGuideView = guideView;
+        this.invalidate();
+    }
+
+    public void guideDraw(GuideView guideView, View descriptionView) {
+        this.mGuideView = guideView;
+        this.descriptionView = descriptionView;
+        guideDrawFlag = true;
         this.invalidate();
     }
 
@@ -65,7 +74,10 @@ public class GuideMaskView extends View {
             mPaint.setXfermode(mXfermode_DST_OUT);
             mGuideView.drawHollow(mGuideView.getId(), canvas, mPaint);
             mPaint.setXfermode(null);
-            mGuideView.OnGuideDraw(mGuideView.getId(), canvas);
+            if (guideDrawFlag) {
+                mGuideView.onGuideDraw(mGuideView.getId(), canvas, descriptionView);
+                guideDrawFlag = false;
+            }
         }
     }
 

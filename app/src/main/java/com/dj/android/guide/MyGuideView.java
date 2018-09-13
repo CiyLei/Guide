@@ -2,8 +2,10 @@ package com.dj.android.guide;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -39,11 +41,13 @@ public class MyGuideView extends DefaultGuideView {
      * @param canvas
      */
     @Override
-    public void OnGuideDraw(int id, Canvas canvas) {
+    public void onGuideDraw(int id, Canvas canvas, View descriptionView) {
         if (getView() != null) {
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.FILL);
             paint.setAlpha(100);
+            paint.setColor(Color.RED);
+            paint.setStrokeWidth(3);
             paint.setAntiAlias(true);
 
             int[] location = new int[2];
@@ -51,6 +55,22 @@ public class MyGuideView extends DefaultGuideView {
             Rect rect = new Rect(location[0], location[1], location[0] + getView().getWidth(), location[1] + getView().getHeight());
 
             canvas.drawBitmap(BitmapFactory.decodeResource(getView().getContext().getResources(), R.mipmap.back), null, rect, paint);
+            //获取说明view的坐标
+            Rect descriptionLocation = getDescriptionLocation(descriptionView, location, 100, 100);
+            //连线
+            if (descriptionLocation.top >= getView().getTop()) {
+                canvas.drawLine(location[0] + (getView().getWidth() / 2),
+                        location[1] + getView().getHeight(),
+                        descriptionLocation.left + (descriptionLocation.width() / 2),
+                        descriptionLocation.top,
+                        paint);
+            } else {
+                canvas.drawLine(location[0] + (getView().getWidth() / 2),
+                        location[1],
+                        descriptionLocation.left + (descriptionLocation.width() / 2),
+                        descriptionLocation.top + descriptionLocation.height(),
+                        paint);
+            }
         }
     }
 
@@ -67,7 +87,14 @@ public class MyGuideView extends DefaultGuideView {
         if (getView() != null) {
             int[] location = new int[2];
             getView().getLocationOnScreen(location);
-            vg.getViewTreeObserver().addOnGlobalLayoutListener(new DescriptionViewTreeObserver(vg, location, flp));
+            //先测量大小
+            vg.measure(
+                    View.MeasureSpec.makeMeasureSpec(GuideUtils.dip2px(getView().getContext(), 200), View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(GuideUtils.dip2px(getView().getContext(), 60), View.MeasureSpec.EXACTLY));
+            Rect descriptionLocation = getDescriptionLocation(vg, location, 100, 100);
+            flp.leftMargin = descriptionLocation.left;
+            flp.topMargin = descriptionLocation.top;
+            vg.setLayoutParams(flp);
         }
         return vg;
     }

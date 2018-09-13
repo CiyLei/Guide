@@ -22,12 +22,14 @@ public class MainActivity extends AppCompatActivity {
     TextView tv;
     @GuideBindView(id = 2,value = "这是一个Button", guideView = "com.dj.android.guide.MyGuideView")
     Button btn;
-    @GuideBindView("这是一个Textview1")
+    @GuideBindView(value = "这是一个Textview1", guideView = "com.dj.android.guide.MyGuideView")
     TextView tv1;
-    @GuideBindView("这是一个Textview2")
+    @GuideBindView(value = "这是一个Textview2", guideView = "com.dj.android.guide.MyGuideView")
     TextView tv2;
-    @GuideBindView("这是一个Textview3")
+    @GuideBindView(value = "这是一个Textview3", guideView = "com.dj.android.guide.MyGuideView")
     TextView tv3;
+    @GuideBindView(value = "这是一个ContentView")
+    View contentView;
     Toolbar toolbar;
 
     @Override
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         tv1 = findViewById(R.id.tv1);
         tv2 = findViewById(R.id.tv2);
         tv3 = findViewById(R.id.tv3);
+        contentView = getWindow().getDecorView();
         setSupportActionBar(toolbar);
 
         new Handler().postDelayed(new Runnable() {
