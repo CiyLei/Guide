@@ -60,7 +60,7 @@ public class GuideManager {
             @Override
             public void onClick(View v) {
                 if (currentGuideView != null) {
-                    if (currentGuideView.onClickBackgroundNext()) {
+                    if (currentGuideView.onClickBackgroundNext(currentGuideView.getId())) {
                         onNext();
                     }
                 } else {
@@ -111,14 +111,18 @@ public class GuideManager {
             //回调OnGuideDraw
             mGuideMaskView.guideDraw(currentGuideView, descriptionView);
             //添加说明view
-            if (descriptionView != null) {
-                if (mDescriptionView == null) {
-                    mDescriptionView = descriptionView;
+            if (mDescriptionView == null) {
+                mDescriptionView = descriptionView;
+                if (mDescriptionView != null) {
                     mBackgroundView.addView(mDescriptionView);
-                } else {
-                    //如果说明的view存在的话先移除，然后添加
+                }
+            } else {
+                //如果说明的view存在的话先移除，然后添加
+                if (mDescriptionView != null) {
                     mBackgroundView.removeView(mDescriptionView);
-                    mDescriptionView = descriptionView;
+                }
+                mDescriptionView = descriptionView;
+                if (mDescriptionView != null) {
                     mBackgroundView.addView(mDescriptionView);
                 }
             }

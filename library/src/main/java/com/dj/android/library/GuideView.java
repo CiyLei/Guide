@@ -69,7 +69,7 @@ public abstract class GuideView {
      * 点击背景下一步
      * @return
      */
-    public boolean onClickBackgroundNext() {
+    public boolean onClickBackgroundNext(int id) {
         return true;
     }
 }

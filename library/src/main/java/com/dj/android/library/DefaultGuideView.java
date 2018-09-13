@@ -52,11 +52,12 @@ public class DefaultGuideView extends GuideView {
      */
     @Override
     public View descriptionView(int id) {
-        ViewGroup vg = (ViewGroup) View.inflate(getView().getContext(), R.layout.guide_description, null);
-        TextView tv = vg.findViewById(R.id.guide_description_tv);
-        tv.setText(getDescription());
-
+        ViewGroup vg = null;
         if (getView() != null) {
+            vg = (ViewGroup) View.inflate(getView().getContext(), R.layout.guide_description, null);
+            TextView tv = vg.findViewById(R.id.guide_description_tv);
+            tv.setText(getDescription());
+
             int[] location = new int[2];
             getView().getLocationOnScreen(location);
 

@@ -43,19 +43,21 @@ public class MyGuideView extends DefaultGuideView {
      */
     @Override
     public View descriptionView(int id) {
-        TextView vg = (TextView) View.inflate(getView().getContext(), R.layout.view_guide_description, null);
-        FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(GuideUtils.dip2px(getView().getContext(), 200),
-                GuideUtils.dip2px(getView().getContext(), 60));
-        vg.setText(getDescription());
-        vg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getManager() != null) {
-                    getManager().onNext();
-                }
-            }
-        });
+        TextView vg = null;
         if (getView() != null) {
+            vg = (TextView) View.inflate(getView().getContext(), R.layout.view_guide_description, null);
+            FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(GuideUtils.dip2px(getView().getContext(), 200),
+                    GuideUtils.dip2px(getView().getContext(), 60));
+            vg.setText(getDescription());
+            vg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getManager() != null) {
+                        getManager().onNext();
+                    }
+                }
+            });
+
             int[] location = new int[2];
             getView().getLocationOnScreen(location);
             //先测量大小
@@ -66,6 +68,9 @@ public class MyGuideView extends DefaultGuideView {
             flp.leftMargin = descriptionLocation.left;
             flp.topMargin = descriptionLocation.top;
             vg.setLayoutParams(flp);
+        } else {
+            //当要镂空的view是null的时候，跳过此介绍
+            getManager().onNext();
         }
         return vg;
     }
@@ -113,7 +118,7 @@ public class MyGuideView extends DefaultGuideView {
      * @return
      */
     @Override
-    public boolean onClickBackgroundNext() {
+    public boolean onClickBackgroundNext(int id) {
         return false;
     }
 }
