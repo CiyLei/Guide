@@ -104,14 +104,28 @@ public class DefaultGuideView extends GuideView {
             } else if (bl == maxArea) {
                 descriptionViewLeft = viewLocation[0] + getView().getWidth() - descriptionView.getMeasuredWidth() - dx;
                 descriptionViewTop = viewLocation[1] + getView().getHeight() + dy;
-            } else if (br == maxArea) {
+            } else {
                 descriptionViewLeft = viewLocation[0] + dx;
                 descriptionViewTop = viewLocation[1] + getView().getHeight() + dy;
             }
         } else {
-            //居中显示
-            descriptionViewLeft = viewLocation[0] + (getView().getWidth() / 2) - (descriptionView.getMeasuredWidth() / 2) + dx;
-            descriptionViewTop = viewLocation[1] + (getView().getHeight() / 2) - (descriptionView.getMeasuredHeight() / 2) + dy;
+            //左右的面积
+            int l = viewLocation[0] * GuideUtils.getScreenHeight(getView().getContext());
+            int r = (GuideUtils.getScreenWidth(getView().getContext()) - viewLocation[0] - getView().getWidth()) * GuideUtils.getScreenHeight(getView().getContext());
+            int lrMaxArea = Math.max(l, r);
+            if (descriptionView.getMeasuredWidth() * descriptionView.getMeasuredHeight() <= lrMaxArea) {
+                if (l == lrMaxArea) {
+                    descriptionViewLeft = viewLocation[0] - descriptionView.getMeasuredWidth() - dx;
+                    descriptionViewTop = viewLocation[1] + (getView().getHeight() / 2) - (descriptionView.getMeasuredHeight() / 2)+ dy;
+                } else {
+                    descriptionViewLeft = viewLocation[0] + getView().getWidth() + dx;
+                    descriptionViewTop = viewLocation[1] + (getView().getHeight() / 2) - (descriptionView.getMeasuredHeight() / 2) + dy;
+                }
+            } else {
+                //居中显示
+                descriptionViewLeft = viewLocation[0] + (getView().getWidth() / 2) - (descriptionView.getMeasuredWidth() / 2) + dx;
+                descriptionViewTop = viewLocation[1] + (getView().getHeight() / 2) - (descriptionView.getMeasuredHeight() / 2) + dy;
+            }
         }
         Log.d(TAG, "getDescriptionLocation: " + descriptionViewLeft + "," + descriptionViewTop);
         return new Rect(descriptionViewLeft, descriptionViewTop, descriptionViewLeft + descriptionView.getMeasuredWidth(),

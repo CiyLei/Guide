@@ -28,22 +28,25 @@ public class MainActivity extends AppCompatActivity {
     TextView tv2;
     @GuideBindView(value = "这是一个Textview3", guideView = "com.dj.android.guide.MyGuideView")
     TextView tv3;
+    @GuideBindView(value = "这是一个Textview4")
+    TextView tv4;
+    @GuideBindView(value = "这是一个Textview5")
+    TextView tv5;
     @GuideBindView(value = "这是一个ContentView")
     View contentView;
-    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = findViewById(R.id.toolbar);
         btn = findViewById(R.id.btn);
         tv = findViewById(R.id.tv);
         tv1 = findViewById(R.id.tv1);
         tv2 = findViewById(R.id.tv2);
         tv3 = findViewById(R.id.tv3);
+        tv4 = findViewById(R.id.tv4);
+        tv5 = findViewById(R.id.tv5);
         contentView = getWindow().getDecorView();
-        setSupportActionBar(toolbar);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -78,10 +81,4 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "onFinsh", Toast.LENGTH_SHORT).show();
         }
     };
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
 }
