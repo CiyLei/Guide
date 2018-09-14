@@ -164,7 +164,7 @@ public class GuideInjectProcessor extends AbstractProcessor {
             builder.append("        for (int i = 0; i < emptyCount; i++) {\n");
             builder.append("        GuideView gv = null;\n");
             builder.append("            try {\n");
-            builder.append("                gv = guideViewClass.getConstructor(int.class, View.class, String.class).newInstance(i, null, \"\");\n");
+            builder.append("                gv = guideViewClass.getConstructor(int.class, View.class, String.class).newInstance(101 + i, null, \"\");\n");
             builder.append("            } catch (Exception e) {\n");
             builder.append("                e.printStackTrace();\n");
             builder.append("            }\n");

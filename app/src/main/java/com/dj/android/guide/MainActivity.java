@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity$$GuideInject.show(MainActivity.this, listener);
+                MainActivity$$GuideInject.show(MainActivity.this, listener, 8, DefaultGuideView.class);
             }
         });
     }
