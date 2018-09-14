@@ -127,8 +127,10 @@ public class GuideInjectProcessor extends AbstractProcessor {
         StringBuilder builder = new StringBuilder();
         builder.append("package " + packageFullName).append(";\n\n");
         builder.append("import android.content.Context;\n");
+        builder.append("import android.view.View;\n");
         builder.append("import " + GuidePackage + ".Guide;\n");
         builder.append("import " + GuidePackage + ".GuideManager;\n\n");
+        builder.append("import " + GuidePackage + ".GuideView;\n\n");
         builder.append("public class " + typeElement.getSimpleName() + "$$GuideInject" + " {\n\n");
         builder.append("    public static void show(Context context, GuideManager.Listener listener) {\n");
         builder.append("        Guide.Builder()\n");
@@ -148,7 +150,55 @@ public class GuideInjectProcessor extends AbstractProcessor {
         }
         builder.append("            .show(context);\n");
         builder.append("    }\n\n");
-        builder.append("}");
+        if (vs.size() > 0) {
+
+            builder.append("    public static void show(Context context, GuideManager.Listener listener, int emptyCount, Class<? extends GuideView> guideViewClass) {\n");
+            builder.append("        Guide.Builder builder = Guide.Builder();\n");
+            builder.append("        builder\n");
+            for (VariableInfo v : vs) {
+                builder.append("            .add(new " + v.getGuideView() + "(" + v.getId() + ","//v.getGuideView().getSimpleName()
+                        + "((" + typeElement.getSimpleName() + " )context)." + v.getVariableElement().getSimpleName().toString()
+                        + ",\"" + v.getDescription() + "\"))\n");
+            }
+            builder.append("        ;\n");
+            builder.append("        for (int i = 0; i < emptyCount; i++) {\n");
+            builder.append("        GuideView gv = null;\n");
+            builder.append("            try {\n");
+            builder.append("                gv = guideViewClass.getConstructor(int.class, View.class, String.class).newInstance(i, null, \"\");\n");
+            builder.append("            } catch (Exception e) {\n");
+            builder.append("                e.printStackTrace();\n");
+            builder.append("            }\n");
+            builder.append("            if (gv != null) {\n");
+            builder.append("                builder.add(gv);\n");
+            builder.append("            }\n");
+            builder.append("        }\n");
+            builder.append("        builder.show(context, listener);\n");
+            builder.append("    }\n\n");
+
+            builder.append("    public static void show(Context context, GuideManager.Listener listener, int[] emptyIds, Class<? extends GuideView> guideViewClass) {\n");
+            builder.append("        Guide.Builder builder = Guide.Builder();\n");
+            builder.append("        builder\n");
+            for (VariableInfo v : vs) {
+                builder.append("            .add(new " + v.getGuideView() + "(" + v.getId() + ","//v.getGuideView().getSimpleName()
+                        + "((" + typeElement.getSimpleName() + " )context)." + v.getVariableElement().getSimpleName().toString()
+                        + ",\"" + v.getDescription() + "\"))\n");
+            }
+            builder.append("        ;\n");
+            builder.append("        for (int id : emptyIds) {\n");
+            builder.append("            GuideView gv = null;\n");
+            builder.append("            try {\n");
+            builder.append("                gv = guideViewClass.getConstructor(int.class, View.class, String.class).newInstance(id, null, \"\");\n");
+            builder.append("            } catch (Exception e) {\n");
+            builder.append("                e.printStackTrace();\n");
+            builder.append("            }\n");
+            builder.append("            if (gv != null) {\n");
+            builder.append("                builder.add(gv);\n");
+            builder.append("            }\n");
+            builder.append("        }\n");
+            builder.append("        builder.show(context, listener);\n");
+            builder.append("    }\n\n");
+            builder.append("}");
+        }
         return builder.toString();
     }
 }

@@ -1,5 +1,6 @@
 package com.dj.android.guide;
 
+import android.content.Context;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,8 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dj.android.annotation.GuideBindView;
+import com.dj.android.library.DefaultGuideView;
+import com.dj.android.library.Guide;
 import com.dj.android.library.GuideManager;
 import com.dj.android.guide.MainActivity$$GuideInject;
+import com.dj.android.library.GuideView;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,4 +87,13 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "onFinsh", Toast.LENGTH_SHORT).show();
         }
     };
+
+    public void test(Class<? extends GuideView> guideViewClass) {
+        try {
+            GuideView guideView = guideViewClass.getConstructor(int.class, View.class, String.class).newInstance(0, null, "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        Guide.Builder().add()
+    }
 }
