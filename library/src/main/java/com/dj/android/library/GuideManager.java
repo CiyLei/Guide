@@ -35,7 +35,7 @@ public class GuideManager {
         this.mGuideViews.add(guideView);
     }
 
-    public void start(Context context) {
+    public void show(Context context) {
         sortGuideViews();
         showBackgroundDialog(context);
         onNext();

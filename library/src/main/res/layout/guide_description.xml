@@ -2,10 +2,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:minHeight="60dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/guide_description_cv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -24,5 +24,15 @@
             android:textSize="14sp"/>
 
     </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/guide_description_tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:visibility="gone" />
 
 </FrameLayout>

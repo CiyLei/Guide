@@ -130,23 +130,23 @@ public class GuideInjectProcessor extends AbstractProcessor {
         builder.append("import " + GuidePackage + ".Guide;\n");
         builder.append("import " + GuidePackage + ".GuideManager;\n\n");
         builder.append("public class " + typeElement.getSimpleName() + "$$GuideInject" + " {\n\n");
-        builder.append("    public static void bind(Context context, GuideManager.Listener listener) {\n");
+        builder.append("    public static void show(Context context, GuideManager.Listener listener) {\n");
         builder.append("        Guide.Builder()\n");
         for (VariableInfo v : vs) {
             builder.append("            .add(new " + v.getGuideView() + "(" + v.getId() + ","//v.getGuideView().getSimpleName()
                     + "((" + typeElement.getSimpleName() + " )context)." + v.getVariableElement().getSimpleName().toString()
                     + ",\"" + v.getDescription() + "\"))\n");
         }
-        builder.append("            .bind(context, listener);\n");
+        builder.append("            .show(context, listener);\n");
         builder.append("    }\n\n");
-        builder.append("    public static void bind(Context context) {\n");
+        builder.append("    public static void show(Context context) {\n");
         builder.append("        Guide.Builder()\n");
         for (VariableInfo v : vs) {
             builder.append("            .add(new " + v.getGuideView() + "(" + v.getId() + ","//v.getGuideView().getSimpleName()
                     + "((" + typeElement.getSimpleName() + " )context)." + v.getVariableElement().getSimpleName().toString()
                     + ",\"" + v.getDescription() + "\"))\n");
         }
-        builder.append("            .bind(context);\n");
+        builder.append("            .show(context);\n");
         builder.append("    }\n\n");
         builder.append("}");
         return builder.toString();

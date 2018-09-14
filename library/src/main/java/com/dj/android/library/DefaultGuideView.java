@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ public class DefaultGuideView extends GuideView {
 
     @Override
     public int getMaskColor(int id) {
-        return Color.parseColor("#a0000000");
+        return Color.parseColor("#b0000000");
     }
 
     /**
@@ -55,7 +56,10 @@ public class DefaultGuideView extends GuideView {
         ViewGroup vg = null;
         if (getView() != null) {
             vg = (ViewGroup) View.inflate(getView().getContext(), R.layout.guide_description, null);
-            TextView tv = vg.findViewById(R.id.guide_description_tv);
+            TextView tv_card = vg.findViewById(R.id.guide_description_tv);
+            TextView tv = vg.findViewById(R.id.guide_description_tv2);
+            CardView cv = vg.findViewById(R.id.guide_description_cv);
+            tv_card.setText(getDescription());
             tv.setText(getDescription());
 
             int[] location = new int[2];
@@ -67,6 +71,14 @@ public class DefaultGuideView extends GuideView {
             Rect descriptionLocation = getDescriptionLocation(vg, location);
             flp.leftMargin = descriptionLocation.left;
             flp.topMargin = descriptionLocation.top;
+            if (new Rect(location[0], location[1], location[0] + getView().getWidth(), location[1] + getView().getHeight())
+                    .contains(descriptionLocation)) {
+                tv.setVisibility(View.GONE);
+                cv.setVisibility(View.VISIBLE);
+            } else {
+                cv.setVisibility(View.GONE);
+                tv.setVisibility(View.VISIBLE);
+            }
             vg.setLayoutParams(flp);
         }
 

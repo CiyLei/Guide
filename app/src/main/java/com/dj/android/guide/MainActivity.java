@@ -48,12 +48,12 @@ public class MainActivity extends AppCompatActivity {
         tv5 = findViewById(R.id.tv5);
         contentView = getWindow().getDecorView();
 
-        new Handler().postDelayed(new Runnable() {
+        tv5.post(new Runnable() {
             @Override
             public void run() {
-                MainActivity$$GuideInject.bind(MainActivity.this, listener);
+                MainActivity$$GuideInject.show(MainActivity.this);
             }
-        }, 300);
+        });
     }
 
     @Override
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity$$GuideInject.bind(MainActivity.this, listener);
+                MainActivity$$GuideInject.show(MainActivity.this, listener);
             }
         });
     }

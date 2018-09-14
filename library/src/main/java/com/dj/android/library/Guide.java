@@ -21,13 +21,13 @@ public class Guide {
             return this;
         }
 
-        public void bind(Context context) {
-            guideManager.start(context);
+        public void show(Context context) {
+            guideManager.show(context);
         }
 
-        public void bind(Context context, GuideManager.Listener listener) {
+        public void show(Context context, GuideManager.Listener listener) {
             guideManager.setListener(listener);
-            guideManager.start(context);
+            guideManager.show(context);
         }
     }
 
